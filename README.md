@@ -11,3 +11,13 @@ These are my dot files, these are designed to be used with Stow, this guide is f
 # nvim
 
 # p10k
+
+# Fonts
+
+Install with 
+
+  `stow fonts`
+
+Run
+
+  `fc-cache -fv``
