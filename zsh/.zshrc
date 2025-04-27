@@ -103,7 +103,7 @@ else
 fi
 
 # Vi mode baby! https://dougblack.io/words/zsh-vi-mode.html
-bindkey -v
+#bindkey -v
 
 bindkey '^P' up-history
 bindkey '^N' down-history
@@ -111,6 +111,11 @@ bindkey '^?' backward-delete-char
 bindkey '^h' backward-delete-char
 bindkey '^w' backward-kill-word
 bindkey '^r' history-incremental-search-backward
+
+# Bind Home and End keys properly
+bindkey '^[[H' beginning-of-line
+bindkey '^[[F' end-of-line
+
 
 function zle-line-init zle-keymap-select {
     VIM_PROMPT="%{$fg_bold[yellow]%} [% NORMAL]%  %{$reset_color%}"
