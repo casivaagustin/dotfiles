@@ -47,7 +47,7 @@ Install with
 
 Run
 
-  `fc-cache -fv``
+  `fc-cache -fv`
   
 
 # Links and more info
