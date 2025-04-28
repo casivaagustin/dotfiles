@@ -52,8 +52,9 @@ Run
 
 # Links and more info
 
-https://www.youtube.com/watch?v=y6XCebnB9gs
-https://www.youtube.com/watch?v=NoFiYOqnC4o&t=10s
-https://www.youtube.com/watch?v=mmqDYw9C30I
+- https://www.youtube.com/watch?v=y6XCebnB9gs
+- https://www.youtube.com/watch?v=NoFiYOqnC4o&t=10s
+- https://www.youtube.com/watch?v=mmqDYw9C30I
+- https://www.josean.com/posts/7-amazing-cli-tools
 
 
