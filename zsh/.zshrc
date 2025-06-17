@@ -53,10 +53,8 @@ else
     plugins=(
         git 
         docker 
-        brew 
+        #docker-compose
         tmux
-        drush 
-        virtualenv
         zsh-autosuggestions
         zsh-syntax-highlighting
     )
@@ -144,7 +142,6 @@ alias fd="fdfind"
 
 eval "$(fzf --zsh)"
 
-
 export FZF_DEFAULT_COMMAND="fd --hidden --strip-cwd-prefix --exclude .git"
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_ALT_C_COMMAND="fd --type=d --hidden --strip-cwd-prefix --exclude .git"
@@ -160,9 +157,6 @@ _fzf_compgen_path() {
 _fzf_compgen_dir() {
   fd --type=d --hidden --exclude .git . "$1"
 }
-
-
-
 
 export FZF_CTRL_T_OPTS="--preview 'bat -n --color=always --line-range :500 {}'"
 export FZF_ALT_C_OPTS="--preview 'eza --tree --color=always {} | head -200'"
@@ -182,9 +176,8 @@ _fzf_comprun() {
   esac
 }
 
-alias dc="docker compose"
-alias dce="docker compose exec app"
+alias dce="docker compose exec"
 alias dca="docker compose exec app php artisan"
-alias dcup="docker compose up --build"
+alias dcapp="docker compose exec app"
 alias dcnrd="docker compose exec app npm run dev"
-alias artisan="dce php artisan"
+alias artisan="dca"
