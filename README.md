@@ -20,10 +20,11 @@ Some of them it might require some additional installation.
 - bat
 - delta 
 - eza
+- stow
 
 ## Ubuntu Install
 
-  `sudo apt install zsh fzf bat delta eza fd-find`
+  `sudo apt install zsh fzf bat delta eza fd-find stow`
 
 # zsh
 
