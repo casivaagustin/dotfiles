@@ -21,6 +21,10 @@ Some of them it might require some additional installation.
 - delta 
 - eza
 
+## Ubuntu Install
+
+  `sudo apt install zsh fzf bat delta eza fd-find`
+
 # zsh
 
 Install
