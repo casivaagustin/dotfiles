@@ -26,6 +26,13 @@ Some of them it might require some additional installation.
 
   `sudo apt install zsh fzf bat delta eza fd-find stow`
 
+## O-my-ZSH and power10k
+
+```
+git clone https://github.com/romkatv/powerlevel10k.git $ZSH_CUSTOM/themes/powerlevel10k
+sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+```
+
 # zsh
 
 Install
