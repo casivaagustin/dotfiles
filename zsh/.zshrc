@@ -177,6 +177,7 @@ _fzf_comprun() {
 }
 
 alias dcup="docker compose up"
+alias dc="docker compose"
 alias dce="docker compose exec"
 alias dca="docker compose exec app php artisan"
 alias dcapp="docker compose exec app"
