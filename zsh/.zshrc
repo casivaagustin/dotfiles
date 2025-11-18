@@ -137,8 +137,13 @@ if [[ -d "$HOME/.pyenv" ]] ; then
 fi
 
 alias ls="eza --color=always --long --git --no-filesize --icons=always --no-time --no-user --no-permissions"
-alias cat="batcat"
-alias fd="fdfind"
+# Create alias for fd if it is not already defined
+command -v fd &>/dev/null || alias fd="fdfind"
+# Create alias for cat if 'bat' or 'batcat' exists
+command -v batcat &>/dev/null && alias cat="batcat"
+command -v bat &>/dev/null && alias cat="bat"
+
+
 
 eval "$(fzf --zsh)"
 
