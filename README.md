@@ -21,10 +21,14 @@ Some of them it might require some additional installation.
 - delta 
 - eza
 - stow
+- wish
+- tk
+- libnotify-bin
+- libnotify4
 
 ## Ubuntu Install
 
-  `sudo apt install zsh fzf bat delta eza fd-find stow`
+  `sudo apt install zsh fzf bat delta eza fd-find stow wish libnotify-bin libnotify4`
 
 ## O-my-ZSH and power10k
 
