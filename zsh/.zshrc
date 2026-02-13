@@ -188,3 +188,11 @@ alias dca="docker compose exec app php artisan"
 alias dcapp="docker compose exec app"
 alias dcnrd="docker compose exec app npm run dev"
 alias artisan="dca"
+
+# pnpm
+export PNPM_HOME="/home/agustin/.local/share/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end
