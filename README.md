@@ -30,6 +30,17 @@ Some of them it might require some additional installation.
 
   `sudo apt install zsh fzf bat delta eza fd-find stow wish libnotify-bin libnotify4`
 
+## OSX
+
+	```
+	brew install htop bat fzf fd delta eza stow tmux
+	git clone https://github.com/zsh-users/zsh-autosuggestions 
+	git clone https://github.com/zsh-users/zsh-syntax-highlighting
+   	git clone --depth=1 https://github.com/romkatv/powerlevel10k.git 
+   	brew tap homebrew/cask-fonts\nbrew install font-meslo-lg-nerd-font
+   	## Set the profile font to nerd font to proper chars rendering.
+	``` 
+
 ## O-my-ZSH and power10k
 
 ```
