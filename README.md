@@ -32,18 +32,19 @@ Some of them it might require some additional installation.
 
 ## OSX
 
-	```
+```
+    cd ~
 	brew install htop bat fzf fd delta eza stow tmux
 	git clone https://github.com/zsh-users/zsh-autosuggestions 
 	git clone https://github.com/zsh-users/zsh-syntax-highlighting
    	git clone --depth=1 https://github.com/romkatv/powerlevel10k.git 
    	brew tap homebrew/cask-fonts\nbrew install font-meslo-lg-nerd-font
-   	## Set the profile font to nerd font to proper chars rendering.
-	``` 
+``` 
 
 ## O-my-ZSH and power10k
 
 ```
+cd ~
 git clone https://github.com/romkatv/powerlevel10k.git $ZSH_CUSTOM/themes/powerlevel10k
 sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 ```
@@ -52,13 +53,19 @@ sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/i
 
 Install
 
- `stow zsh`
+```
+cd ~/dotfiles
+stow zsh
+```
 
 # p10k
 
 Install 
 
-`stow p10k`
+```
+cd ~/dotfiles
+stow p10k
+```
 
 # tmux
 
@@ -69,10 +76,6 @@ Install Ultimate VIM first
 ```
 cd ~
 git clone --depth=1 https://github.com/amix/vimrc.git ~/.vim_runtime
-```
-Then
- 
-```
 cd ~/dotfiles
 stow vim
 ```
@@ -85,10 +88,15 @@ Install with
 
   `stow fonts`
 
-Run
+On Linux Run
 
   `fc-cache -fv`
   
+On OSX, install the fonts and set the font in your terminal profile (iterm2 > settings> profile)
+
+```
+   brew tap homebrew/cask-fonts\nbrew install font-meslo-lg-nerd-font
+```
 
 # Links and more info
 
