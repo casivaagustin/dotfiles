@@ -25,16 +25,21 @@ Some of them it might require some additional installation.
 - tk
 - libnotify-bin
 - libnotify4
+- btop
+- htop
+- mc
+- ncdu
+- tmux
 
 ## Ubuntu Install
 
-  `sudo apt install zsh fzf bat delta eza fd-find stow wish libnotify-bin libnotify4`
+  `sudo apt install zsh fzf bat delta eza fd-find stow wish libnotify-bin libnotify4 btop htop nc ncdu tmux`
 
 ## OSX
 
 ```
     cd ~
-	brew install htop bat fzf fd delta eza stow tmux
+	brew install htop bat fzf fd delta eza stow tmux btop htop mc
 	git clone https://github.com/zsh-users/zsh-autosuggestions 
 	git clone https://github.com/zsh-users/zsh-syntax-highlighting
    	git clone --depth=1 https://github.com/romkatv/powerlevel10k.git 
@@ -81,6 +86,14 @@ stow vim
 ```
 
 # nvim
+
+```
+cd ~
+git clone https://github.com/LazyVim/starter ~/.config/nvim
+rm -rf ~/.config/nvim/.git
+cd ~/dotfiles
+stow nvim
+```
 
 # Fonts
 
