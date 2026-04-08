@@ -64,6 +64,19 @@ Install
 
 # vim
 
+Install Ultimate VIM first
+
+```
+cd ~
+git clone --depth=1 https://github.com/amix/vimrc.git ~/.vim_runtime
+```
+Then
+ 
+```
+cd ~/dotfiles
+stow vim
+```
+
 # nvim
 
 # Fonts
