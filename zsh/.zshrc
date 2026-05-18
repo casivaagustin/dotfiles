@@ -188,6 +188,13 @@ alias dca="docker compose exec app php artisan"
 alias dcapp="docker compose exec app"
 alias dcnrd="docker compose exec app npm run dev"
 alias artisan="dca"
+alias screenoff="xset dpms force off"
+alias hdmionl="xrandr --output HDMI-1-0 --auto --left-of eDP-1"
+alias hdmionr="xrandr --output HDMI-1-0 --auto --right-of eDP-1"
+alias hdmiont="xrandr --output HDMI-1-0 --auto --top-of eDP-1"
+alias hdmioff="xrandr --output HDMI-1-0 --off"
+
+alias projects="cd ~/projects"
 
 # pnpm
 export PNPM_HOME="/home/agustin/.local/share/pnpm"
@@ -196,3 +203,14 @@ case ":$PATH:" in
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
 # pnpm end
+#
+
+#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+export SDKMAN_DIR="$HOME/.sdkman"
+[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
+
+# ~/.bashrc or ~/.zshrc
+export SDKMAN_AUTO_ENV=true
+
+# opencode
+export PATH=/home/agustin/.opencode/bin:$PATH
