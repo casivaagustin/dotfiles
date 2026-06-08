@@ -136,12 +136,13 @@ if [[ -d "$HOME/.pyenv" ]] ; then
     eval "$(pyenv init -)"
 fi
 
-alias ls="eza --color=always --long --git --no-filesize --icons=always --no-time --no-user --no-permissions"
+alias ls="eza --color=always --long --git --icons=always"
 # Create alias for fd if it is not already defined
 command -v fd &>/dev/null || alias fd="fdfind"
+command -v fdfind &>/dev/null || alias fdfind="fd"
 # Create alias for cat if 'bat' or 'batcat' exists
-command -v batcat &>/dev/null && alias cat="batcat"
-command -v bat &>/dev/null && alias cat="bat"
+command -v batcat &>/dev/null && alias cat="batcat --style=plain"
+command -v bat &>/dev/null && alias cat="bat --style=plain"
 
 
 
@@ -189,10 +190,10 @@ alias dcapp="docker compose exec app"
 alias dcnrd="docker compose exec app npm run dev"
 alias artisan="dca"
 alias screenoff="xset dpms force off"
-alias hdmionl="xrandr --output HDMI-1-0 --auto --left-of eDP-1"
-alias hdmionr="xrandr --output HDMI-1-0 --auto --right-of eDP-1"
-alias hdmiont="xrandr --output HDMI-1-0 --auto --top-of eDP-1"
-alias hdmioff="xrandr --output HDMI-1-0 --off"
+alias hdmionl="xrandr --output HDMI-1-2 --auto --left-of eDP-1"
+alias hdmionr="xrandr --output HDMI-1-2 --auto --right-of eDP-1"
+alias hdmiont="xrandr --output HDMI-1-2 --auto --top-of eDP-1"
+alias hdmioff="xrandr --output HDMI-1-2 --off"
 
 alias projects="cd ~/projects"
 
@@ -214,3 +215,6 @@ export SDKMAN_AUTO_ENV=true
 
 # opencode
 export PATH=/home/agustin/.opencode/bin:$PATH
+
+## Esta sive para usar 1password agent con dbeaver, pero después no anda con teleport.
+#export SSH_AUTH_SOCK=~/.1password/agent.sock
