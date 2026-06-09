@@ -218,3 +218,10 @@ export PATH=/home/agustin/.opencode/bin:$PATH
 
 ## Esta sive para usar 1password agent con dbeaver, pero después no anda con teleport.
 #export SSH_AUTH_SOCK=~/.1password/agent.sock
+
+
+# Added by Antigravity CLI installer
+export PATH="/home/agustin/.local/bin:$PATH"
+
+export PATH="/home/agustin/.lando/bin:$PATH"; #landopath
+
