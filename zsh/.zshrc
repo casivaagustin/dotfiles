@@ -194,6 +194,8 @@ alias hdmionl="xrandr --output HDMI-1-2 --auto --left-of eDP-1"
 alias hdmionr="xrandr --output HDMI-1-2 --auto --right-of eDP-1"
 alias hdmiont="xrandr --output HDMI-1-2 --auto --top-of eDP-1"
 alias hdmioff="xrandr --output HDMI-1-2 --off"
+alias hdmionrv="xrandr --output DP-1-2 --auto --rotate left --right-of eDP-1"
+alias hdmioffv="xrandr --output DP-1-2 --off"
 
 alias projects="cd ~/projects"
 
