@@ -57,7 +57,8 @@ bindsym $mod+d exec --no-startup-id dmenu_run
 # launch categorized menu
 bindsym $mod+z exec --no-startup-id morc_menu
 
-exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
+# Disabling to have only one lock
+#exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
 
 exec --no-startup-id nm-applet
 
