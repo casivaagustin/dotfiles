@@ -1,0 +1,13 @@
+{
+    "laravel-pint.enable": true,
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+        "source.fixAll": "always"
+    },
+    "editor.inlineSuggest.enabled": true,
+    "php.suggest.basic": false,
+    "intelephense.format.enable": false,
+    "[php]": {
+        "editor.defaultFormatter": "open-southeners.laravel-pint"
+    }
+}
