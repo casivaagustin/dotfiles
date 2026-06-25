@@ -2,6 +2,8 @@ amiralizadeh9480.laravel-extra-intellisense
 bmewburn.vscode-intelephense-client
 bradlc.vscode-tailwindcss
 dbaeumer.vscode-eslint
+devsense.composer-php-vscode
+devsense.profiler-php-vscode
 docker.docker
 eamodio.gitlens
 esbenp.prettier-vscode
