@@ -190,10 +190,10 @@ alias dcapp="docker compose exec app"
 alias dcnrd="docker compose exec app npm run dev"
 alias artisan="dca"
 alias screenoff="xset dpms force off"
-alias hdmionl="xrandr --output HDMI-1-2 --auto --left-of eDP-1"
-alias hdmionr="xrandr --output HDMI-1-2 --auto --right-of eDP-1"
-alias hdmiont="xrandr --output HDMI-1-2 --auto --top-of eDP-1"
-alias hdmioff="xrandr --output HDMI-1-2 --off"
+alias hdmionl="xrandr --output HDMI-1-0 --auto --left-of eDP-1"
+alias hdmionr="xrandr --output HDMI-1-0 --auto --right-of eDP-1"
+alias hdmiont="xrandr --output HDMI-1-0 --auto --top-of eDP-1"
+alias hdmioff="xrandr --output HDMI-1-0 --off"
 alias hdmionrv="xrandr --output DP-1-2 --auto --rotate left --right-of eDP-1"
 alias hdmioffv="xrandr --output DP-1-2 --off"
 
@@ -227,3 +227,6 @@ export PATH="/home/agustin/.local/bin:$PATH"
 
 export PATH="/home/agustin/.lando/bin:$PATH"; #landopath
 
+
+# Added by LM Studio CLI tool (lms)
+export PATH="$PATH:/home/agustin/.lmstudio/bin"
