@@ -423,8 +423,8 @@ mode "$mode_gaps_outer" {
 }
 
 exec --no-startup-id xset s off
-exec --no-startup-id xset -dpms
-exec --no-startup-id xset dpms 0 0 900
+exec --no-startup-id xset +dpms
+exec --no-startup-id xset dpms 0 0 600
 exec --no-startup-id nm-applet
 exec --no-startup-id blueman-applet
 exec --no-startup-id flameshot
