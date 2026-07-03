@@ -1,0 +1,19 @@
+# Packages installed via apt on Ubuntu / Debian.
+# One package per line. Lines starting with # or blank lines are ignored.
+git
+curl
+zsh
+stow
+tmux
+fzf
+bat
+fd-find
+eza
+git-delta
+tk
+libnotify-bin
+libnotify4
+btop
+htop
+mc
+ncdu

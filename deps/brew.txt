@@ -1,0 +1,15 @@
+# Formulae installed via Homebrew on macOS.
+# One package per line. Lines starting with # or blank lines are ignored.
+git
+zsh
+stow
+tmux
+fzf
+bat
+fd
+eza
+git-delta
+btop
+htop
+mc
+ncdu

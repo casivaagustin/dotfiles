@@ -5,7 +5,30 @@ how it works and how to use it.
 
 To start, Clone this repo into ~/dotfiles
 
-Normally, just enter to the dotfiles directory and run
+## One-command install
+
+Runs everything on Manjaro/Arch, Ubuntu/Debian, and macOS. Detects the OS,
+installs packages from `deps/<manager>.txt`, sets up oh-my-zsh + powerlevel10k +
+zsh plugins, clones the Ultimate VIM and LazyVim starters, stows every package,
+and installs editor extensions. Safe to re-run.
+
+```
+cd ~/dotfiles
+./install.sh
+```
+
+Package lists live in `deps/`:
+
+- `deps/apt.txt`    — Ubuntu / Debian
+- `deps/pacman.txt` — Manjaro / Arch
+- `deps/brew.txt`   — macOS (Homebrew)
+
+Edit those files to add or drop dependencies.
+
+## Manual usage
+
+If you just want to re-apply the stow packages without touching dependencies,
+enter the dotfiles directory and run
 
 `stow DIRECTORY`
 

@@ -1,0 +1,1 @@
+# Manjaro/Arch-specific configuration
