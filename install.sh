@@ -9,8 +9,26 @@ DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DEPS_DIR="$DOTFILES_DIR/deps"
 
 log()  { printf '\033[1;34m==>\033[0m %s\n' "$*"; }
+step() { printf '\n\033[1;36m--- [Step %s] %s ---\033[0m\n' "$1" "$2"; }
 warn() { printf '\033[1;33m!!\033[0m %s\n' "$*" >&2; }
 die()  { printf '\033[1;31mxx\033[0m %s\n' "$*" >&2; exit 1; }
+
+banner() {
+  printf '\033[1;35m'
+  cat <<'BANNER'
+
+     _       _    __ _ _
+  __| | ___ | |_ / _(_) | ___  ___
+ / _` |/ _ \| __| |_| | |/ _ \/ __|
+| (_| | (_) | |_|  _| | |  __/\__ \
+ \__,_|\___/ \__|_| |_|_|\___||___/
+
+BANNER
+  printf '\033[0m'
+  printf '\033[1mDotfiles installer\033[0m\n'
+  printf 'Supports: macOS (brew) | Ubuntu/Debian (apt) | Manjaro/Arch (pacman)\n'
+  printf 'Safe to re-run: every step checks state before acting.\n\n'
+}
 
 detect_os() {
   case "$(uname -s)" in
@@ -37,10 +55,22 @@ read_pkg_list() {
   sed -e 's/#.*//' -e 's/[[:space:]]\+$//' -e 's/^[[:space:]]\+//' "$file" | grep -v '^$' || true
 }
 
+# Load a package list into a bash-3-compatible array (macOS ships bash 3.2,
+# which has no `mapfile`/`readarray`). Usage: read_pkg_array <file> <varname>
+read_pkg_array() {
+  local __file="$1" __var="$2" __line
+  eval "$__var=()"
+  while IFS= read -r __line; do
+    [ -n "$__line" ] || continue
+    eval "${__var}+=(\"\$__line\")"
+  done < <(read_pkg_list "$__file")
+}
+
 ensure_brew() {
   if ! command -v brew >/dev/null 2>&1; then
-    log "Installing Homebrew"
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    log "Installing Homebrew (non-interactive)"
+    NONINTERACTIVE=1 /bin/bash -c \
+      "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
   fi
   # Make brew available in this shell if just installed.
   if [ -x /opt/homebrew/bin/brew ]; then
@@ -50,30 +80,105 @@ ensure_brew() {
   fi
 }
 
+# Prime sudo and keep the timestamp fresh in the background so no step later
+# in the installer stops to prompt for a password.
+sudo_keep_alive() {
+  if ! command -v sudo >/dev/null 2>&1; then return; fi
+  log "Priming sudo — enter your password once; the installer will keep it alive"
+  sudo -v
+  ( while true; do sudo -n true; sleep 50; kill -0 "$$" 2>/dev/null || exit; done ) &
+  SUDO_KEEPALIVE_PID=$!
+  trap 'kill "$SUDO_KEEPALIVE_PID" 2>/dev/null || true' EXIT
+}
+
 install_packages_brew() {
   ensure_brew
-  local pkgs
-  mapfile -t pkgs < <(read_pkg_list "$DEPS_DIR/brew.txt")
-  log "Installing ${#pkgs[@]} brew formulae"
-  brew install "${pkgs[@]}"
+  local formulae casks
+  read_pkg_array "$DEPS_DIR/brew.txt"      formulae
+  read_pkg_array "$DEPS_DIR/brew-cask.txt" casks
+  log "Installing ${#formulae[@]} brew formulae"
+  brew install "${formulae[@]}"
+  if [ "${#casks[@]}" -gt 0 ]; then
+    log "Installing brew casks (skipping already-installed)"
+    for cask in "${casks[@]}"; do
+      if brew list --cask "$cask" >/dev/null 2>&1; then
+        log "cask already installed: $cask"
+      else
+        brew install --cask "$cask" || warn "failed to install cask: $cask (may already exist outside Homebrew)"
+      fi
+    done
+  fi
 }
 
 install_packages_apt() {
   local pkgs
-  mapfile -t pkgs < <(read_pkg_list "$DEPS_DIR/apt.txt")
+  read_pkg_array "$DEPS_DIR/apt.txt" pkgs
   log "Updating apt index"
   sudo apt-get update
   log "Installing ${#pkgs[@]} apt packages"
   sudo apt-get install -y "${pkgs[@]}"
+  if [ -x "$DEPS_DIR/apt-third-party.sh" ]; then
+    log "Installing third-party apt packages"
+    bash "$DEPS_DIR/apt-third-party.sh"
+  fi
+}
+
+ensure_yay() {
+  if command -v yay >/dev/null 2>&1; then return; fi
+  log "Bootstrapping yay (AUR helper)"
+  sudo pacman -S --needed --noconfirm base-devel git
+  local tmpdir
+  tmpdir="$(mktemp -d)"
+  git clone https://aur.archlinux.org/yay.git "$tmpdir/yay"
+  (cd "$tmpdir/yay" && makepkg -si --noconfirm)
+  rm -rf "$tmpdir"
 }
 
 install_packages_pacman() {
   local pkgs
-  mapfile -t pkgs < <(read_pkg_list "$DEPS_DIR/pacman.txt")
+  read_pkg_array "$DEPS_DIR/pacman.txt" pkgs
   log "Syncing pacman database"
   sudo pacman -Sy --noconfirm
   log "Installing ${#pkgs[@]} pacman packages"
   sudo pacman -S --needed --noconfirm "${pkgs[@]}"
+
+  local aur_pkgs
+  read_pkg_array "$DEPS_DIR/aur.txt" aur_pkgs
+  if [ "${#aur_pkgs[@]}" -gt 0 ]; then
+    ensure_yay
+    log "Installing ${#aur_pkgs[@]} AUR packages via yay"
+    yay -S --needed --noconfirm --removemake \
+        --answerdiff=None --answerclean=None --answeredit=None \
+        "${aur_pkgs[@]}"
+  fi
+}
+
+install_nvm() {
+  export NVM_DIR="$HOME/.nvm"
+  if [ ! -s "$NVM_DIR/nvm.sh" ]; then
+    log "Installing nvm"
+    curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash
+  else
+    log "nvm already installed"
+  fi
+  # Load nvm into this shell so `nvm` and `npm` work below.
+  # shellcheck disable=SC1091
+  . "$NVM_DIR/nvm.sh"
+  log "Installing latest Node.js via nvm and setting it as default"
+  nvm install node --default
+  nvm use default >/dev/null
+}
+
+install_npm_globals() {
+  if ! command -v npm >/dev/null 2>&1; then
+    warn "npm not available; skipping npm globals"
+    return
+  fi
+  local pkgs
+  read_pkg_array "$DEPS_DIR/npm.txt" pkgs
+  if [ "${#pkgs[@]}" -eq 0 ]; then return; fi
+  log "Installing ${#pkgs[@]} npm global packages"
+  npm install -g "${pkgs[@]}"
 }
 
 install_oh_my_zsh() {
@@ -187,31 +292,54 @@ install_editor_extensions() {
 }
 
 main() {
+  banner
+
   OS="$(detect_os)"
   log "Detected OS: $OS"
 
+  sudo_keep_alive
+
+  step 1 "Installing system packages"
   case "$OS" in
     osx)    install_packages_brew ;;
     debian) install_packages_apt ;;
     arch)   install_packages_pacman ;;
   esac
 
+  step 2 "Installing Oh My Zsh"
   install_oh_my_zsh
+
+  step 3 "Installing Zsh ecosystem (powerlevel10k, plugins)"
   install_zsh_ecosystem
+
+  step 4 "Installing Vim runtime"
   install_vim_runtime
+
+  step 5 "Installing Neovim (LazyVim starter)"
   install_nvim_starter
 
+  step 6 "Installing nvm and Node.js"
+  install_nvm
+
+  step 7 "Installing npm global packages"
+  install_npm_globals
+
+  step 8 "Symlinking dotfiles with stow"
   stow_packages
 
+  step 9 "Setting up fonts"
   if [ "$OS" = "osx" ]; then
     install_fonts_osx
   else
     refresh_font_cache_linux
   fi
 
+  step 10 "Installing editor extensions (VS Code, Cursor)"
   install_editor_extensions
 
-  log "Done. Restart your shell (or run: exec zsh) to pick up changes."
+  printf '\n\033[1;32m'
+  log "All done! Restart your shell (or run: exec zsh) to pick up changes."
+  printf '\033[0m'
 }
 
 main "$@"

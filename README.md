@@ -37,11 +37,24 @@ below, skipping anything already present.
 
 **OS packages** — installed from the appropriate list under `deps/`:
 
-- `deps/apt.txt`    — Ubuntu / Debian (installed with `sudo apt-get install`)
-- `deps/pacman.txt` — Manjaro / Arch  (installed with `sudo pacman -S --needed`)
-- `deps/brew.txt`   — macOS           (installed with `brew install`; Homebrew is installed first if missing)
+- `deps/apt.txt`             — Ubuntu / Debian, official repos (`sudo apt-get install`)
+- `deps/apt-third-party.sh`  — Ubuntu / Debian, third-party repos: Google Chrome, Brave, VS Code, 1Password, Insync, DBeaver, plus Tailscale (official installer), Discord (.deb), Cursor (AppImage in `~/Applications`)
+- `deps/pacman.txt`          — Manjaro / Arch, official repos (`sudo pacman -S --needed`)
+- `deps/aur.txt`             — Manjaro / Arch, AUR packages installed via `yay` (1Password, Google Chrome, Brave, Insync, Cursor, VS Code). `yay` is bootstrapped from AUR git on first run.
+- `deps/brew.txt`             — macOS Homebrew formulae (`brew install`; Homebrew is installed first if missing)
+- `deps/brew-cask.txt`       — macOS Homebrew casks / GUI apps (`brew install --cask`): 1Password, Brave, Calibre, Cursor, DBeaver, Discord, Chrome, Insync, Tailscale, VS Code
 
 Edit those files to add or drop dependencies.
+
+**Node.js via nvm** — the installer clones [nvm](https://github.com/nvm-sh/nvm)
+into `~/.nvm`, installs the latest Node.js with `nvm install node --default`,
+and sets it as the default version. `zsh/.zsh.d/04-tools.zsh` already sources
+nvm on shell startup, so no manual PATH setup is needed. Node.js and npm are
+intentionally NOT in the OS package lists — nvm is the single source of truth.
+
+**Global npm CLIs** — installed via `npm install -g` after nvm is set up:
+
+- `deps/npm.txt` — Claude Code (`@anthropic-ai/claude-code`), Codex (`@openai/codex`), OpenCode (`opencode-ai`). Google Antigravity CLI is listed but commented pending package-name verification.
 
 **Zsh ecosystem** — cloned into the standard oh-my-zsh locations:
 
