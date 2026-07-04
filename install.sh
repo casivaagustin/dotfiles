@@ -111,6 +111,13 @@ install_packages_brew() {
 }
 
 install_packages_apt() {
+  # Remove conflicting Docker repo config from prior installs (different
+  # Signed-By path) so apt-get update doesn't fail.
+  if [ -f /etc/apt/keyrings/docker.asc ] && [ -f /usr/share/keyrings/docker-archive-keyring.gpg ]; then
+    warn "Removing conflicting Docker repo config (/etc/apt/keyrings/docker.asc)"
+    sudo rm -f /etc/apt/keyrings/docker.asc
+    sudo rm -f /etc/apt/sources.list.d/docker.list
+  fi
   local pkgs
   read_pkg_array "$DEPS_DIR/apt.txt" pkgs
   log "Updating apt index"
