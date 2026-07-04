@@ -130,11 +130,23 @@ if ! command -v discord >/dev/null 2>&1; then
 fi
 
 # ---------------------------------------------------------------------------
-# Cursor CLI
+# Cursor Agent CLI
 # ---------------------------------------------------------------------------
-if ! command -v cursor >/dev/null 2>&1; then
-  log "Installing Cursor CLI"
+if ! command -v cursor-agent >/dev/null 2>&1; then
+  log "Installing Cursor Agent CLI"
   curl -fsSL https://cursor.com/install | bash
+fi
+
+# ---------------------------------------------------------------------------
+# Cursor IDE (.deb)
+# ---------------------------------------------------------------------------
+if ! dpkg -s cursor >/dev/null 2>&1; then
+  log "Installing Cursor IDE (.deb)"
+  tmp="$(mktemp -d)"
+  wget -qO "$tmp/cursor.deb" "https://api2.cursor.sh/updates/download/golden/linux-x64-deb/cursor/latest"
+  chmod 644 "$tmp/cursor.deb"
+  sudo apt-get install -y "$tmp/cursor.deb"
+  rm -rf "$tmp"
 fi
 
 # ---------------------------------------------------------------------------
@@ -166,14 +178,6 @@ fi
 if ! command -v lando >/dev/null 2>&1; then
   log "Installing Lando"
   curl -fsSL https://get.lando.dev/setup-lando.sh | bash -s -- --yes
-fi
-
-# ---------------------------------------------------------------------------
-# Cursor CLI
-# ---------------------------------------------------------------------------
-if ! command -v cursor >/dev/null 2>&1; then
-  log "Installing Cursor CLI"
-  curl -fsSL https://cursor.com/install | bash
 fi
 
 # ---------------------------------------------------------------------------
