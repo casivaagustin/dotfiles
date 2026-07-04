@@ -38,6 +38,7 @@ if ! dpkg -s google-chrome-stable >/dev/null 2>&1; then
   log "Installing Google Chrome (.deb)"
   tmp="$(mktemp -d)"
   wget -qO "$tmp/chrome.deb" https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+  chmod 644 "$tmp/chrome.deb"
   sudo apt-get install -y "$tmp/chrome.deb"
   rm -rf "$tmp"
 fi
@@ -91,6 +92,8 @@ add_repo dbeaver \
 # ---------------------------------------------------------------------------
 # Docker CE (docker.com's apt repo, newer than the distro-shipped docker.io)
 # ---------------------------------------------------------------------------
+# Remove conflicting Docker repo configs from prior installs before adding ours.
+sudo rm -f /etc/apt/keyrings/docker.asc /etc/apt/sources.list.d/docker.list
 add_repo docker \
   "https://download.docker.com/linux/${ID}/gpg" \
   "deb [signed-by=/usr/share/keyrings/docker-archive-keyring.gpg arch=$ARCH] https://download.docker.com/linux/${ID} ${CODENAME} stable"
