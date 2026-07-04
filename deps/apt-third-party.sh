@@ -130,27 +130,11 @@ if ! command -v discord >/dev/null 2>&1; then
 fi
 
 # ---------------------------------------------------------------------------
-# Cursor — no apt repo; ships as AppImage. Drop it into ~/Applications and
-# create a launcher in ~/.local/share/applications.
+# Cursor CLI
 # ---------------------------------------------------------------------------
-CURSOR_APPIMAGE="$HOME/Applications/Cursor.AppImage"
-if [ ! -x "$CURSOR_APPIMAGE" ]; then
-  log "Installing Cursor AppImage"
-  mkdir -p "$HOME/Applications"
-  # Cursor's stable download endpoint.
-  wget -qO "$CURSOR_APPIMAGE" "https://downloader.cursor.sh/linux/appImage/x64"
-  chmod +x "$CURSOR_APPIMAGE"
-  mkdir -p "$HOME/.local/share/applications"
-  cat > "$HOME/.local/share/applications/cursor.desktop" <<EOF
-[Desktop Entry]
-Name=Cursor
-Exec=$CURSOR_APPIMAGE %U
-Terminal=false
-Type=Application
-Icon=cursor
-Categories=Development;IDE;
-StartupWMClass=Cursor
-EOF
+if ! command -v cursor >/dev/null 2>&1; then
+  log "Installing Cursor CLI"
+  curl -fsSL https://cursor.com/install | bash
 fi
 
 # ---------------------------------------------------------------------------
