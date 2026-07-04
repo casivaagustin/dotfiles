@@ -1,0 +1,8 @@
+# Global npm CLIs. Installed with `npm install -g` after Node.js is present.
+# One package per line. Lines starting with # or blank lines are ignored.
+@anthropic-ai/claude-code
+@openai/codex
+opencode-ai
+# Google Antigravity CLI — verify the exact package name before enabling.
+# Uncomment when confirmed:
+# @google/antigravity-cli
