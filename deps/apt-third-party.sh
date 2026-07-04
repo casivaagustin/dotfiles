@@ -24,7 +24,7 @@ add_repo() {
     return
   fi
   log "Adding $name apt repo"
-  curl -fsSL "$key_url" | sudo gpg --dearmor -o "$key_path"
+  curl -fsSL "$key_url" | sudo gpg --yes --dearmor -o "$key_path"
   echo "$deb_line" | sudo tee "$list_path" >/dev/null
   need_update=1
 }
@@ -72,7 +72,7 @@ if [ ! -f /etc/debsig/policies/AC2D62742012EA22/1password.pol ]; then
     | sudo tee /etc/debsig/policies/AC2D62742012EA22/1password.pol >/dev/null
   sudo mkdir -p /usr/share/debsig/keyrings/AC2D62742012EA22
   curl -fsSL https://downloads.1password.com/linux/keys/1password.asc \
-    | sudo gpg --dearmor --output /usr/share/debsig/keyrings/AC2D62742012EA22/debsig.gpg
+    | sudo gpg --yes --dearmor --output /usr/share/debsig/keyrings/AC2D62742012EA22/debsig.gpg
 fi
 
 # ---------------------------------------------------------------------------
