@@ -4,7 +4,6 @@
 1password
 brave-browser
 calibre
-cursor
 dbeaver-community
 discord
 google-chrome

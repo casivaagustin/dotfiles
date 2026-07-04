@@ -98,6 +98,30 @@ install_packages_brew() {
   read_pkg_array "$DEPS_DIR/brew-cask.txt" casks
   log "Installing ${#formulae[@]} brew formulae"
   brew install "${formulae[@]}"
+  # Cursor CLI (not the cask/app)
+  if ! command -v cursor >/dev/null 2>&1; then
+    log "Installing Cursor CLI"
+    curl -fsSL https://cursor.com/install | bash
+  fi
+
+  # Claude Code CLI
+  if ! command -v claude >/dev/null 2>&1; then
+    log "Installing Claude Code CLI"
+    curl -fsSL https://claude.ai/install.sh | bash
+  fi
+
+  # Anti Gravity CLI
+  if ! command -v antigravity >/dev/null 2>&1; then
+    log "Installing Anti Gravity CLI"
+    curl -fsSL https://antigravity.google/cli/install.sh | bash
+  fi
+
+  # OpenCode CLI
+  if ! command -v opencode >/dev/null 2>&1; then
+    log "Installing OpenCode CLI"
+    curl -fsSL https://opencode.ai/install | bash
+  fi
+
   if [ "${#casks[@]}" -gt 0 ]; then
     log "Installing brew casks (skipping already-installed)"
     for cask in "${casks[@]}"; do

@@ -167,3 +167,35 @@ if ! command -v lando >/dev/null 2>&1; then
   log "Installing Lando"
   curl -fsSL https://get.lando.dev/setup-lando.sh | bash -s -- --yes
 fi
+
+# ---------------------------------------------------------------------------
+# Cursor CLI
+# ---------------------------------------------------------------------------
+if ! command -v cursor >/dev/null 2>&1; then
+  log "Installing Cursor CLI"
+  curl -fsSL https://cursor.com/install | bash
+fi
+
+# ---------------------------------------------------------------------------
+# Claude Code CLI
+# ---------------------------------------------------------------------------
+if ! command -v claude >/dev/null 2>&1; then
+  log "Installing Claude Code CLI"
+  curl -fsSL https://claude.ai/install.sh | bash
+fi
+
+# ---------------------------------------------------------------------------
+# Anti Gravity CLI
+# ---------------------------------------------------------------------------
+if ! command -v antigravity >/dev/null 2>&1; then
+  log "Installing Anti Gravity CLI"
+  curl -fsSL https://antigravity.google/cli/install.sh | bash
+fi
+
+# ---------------------------------------------------------------------------
+# OpenCode CLI
+# ---------------------------------------------------------------------------
+if ! command -v opencode >/dev/null 2>&1; then
+  log "Installing OpenCode CLI"
+  curl -fsSL https://opencode.ai/install | bash
+fi
