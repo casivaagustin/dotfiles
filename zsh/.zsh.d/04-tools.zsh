@@ -1,29 +1,44 @@
-# NVM
-if [[ "Darwin" == $(uname -s) ]]; then
-    export NVM_DIR="$HOME/.nvm"
-    if [[ "arm64" == $(arch) ]]; then
-        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-        [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
-    else
-        [ -s "/usr/local/opt/nvm/nvm.sh" ] && \. "/usr/local/opt/nvm/nvm.sh"
-        [ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/usr/local/opt/nvm/etc/bash_completion.d/nvm"
-    fi
-else
-    export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
-    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-fi
+# NVM — lazy-loaded (sourcing nvm.sh eagerly adds ~7s)
+export NVM_DIR="$HOME/.nvm"
+# Put nvm's default node on PATH so node/npm resolve without loading nvm
+_nvm_node_dirs=("$NVM_DIR"/versions/node/v*(NOn))
+(( ${#_nvm_node_dirs} )) && path=("${_nvm_node_dirs[1]}/bin" $path)
+unset _nvm_node_dirs
+_load_nvm() {
+  unset -f nvm node npm npx corepack 2>/dev/null
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" --no-use
+}
+nvm()      { _load_nvm; nvm "$@"; }
+node()     { _load_nvm; node "$@"; }
+npm()      { _load_nvm; npm "$@"; }
+npx()      { _load_nvm; npx "$@"; }
+corepack() { _load_nvm; corepack "$@"; }
 
-# pyenv
+# pyenv — lazy-loaded
 if [[ -d "$HOME/.pyenv" ]]; then
     export PYENV_ROOT="$HOME/.pyenv"
     command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
-    eval "$(pyenv init -)"
+    _load_pyenv() {
+      unset -f pyenv 2>/dev/null
+      eval "$(command pyenv init -)"
+    }
+    pyenv() { _load_pyenv; pyenv "$@"; }
 fi
 
-# SDKMAN - must be near end of file
+# SDKMAN — lazy-loaded
 export SDKMAN_DIR="$HOME/.sdkman"
-[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
 export SDKMAN_AUTO_ENV=true
+if [[ -s "$SDKMAN_DIR/bin/sdkman-init.sh" ]]; then
+    _load_sdkman() {
+      unset -f sdk java javac gradle maven 2>/dev/null
+      source "$SDKMAN_DIR/bin/sdkman-init.sh"
+    }
+    sdk()    { _load_sdkman; sdk "$@"; }
+    java()   { _load_sdkman; java "$@"; }
+    javac()  { _load_sdkman; javac "$@"; }
+    gradle() { _load_sdkman; gradle "$@"; }
+    maven()  { _load_sdkman; maven "$@"; }
+fi
 
 # fzf
 eval "$(fzf --zsh)"

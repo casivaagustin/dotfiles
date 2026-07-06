@@ -16,9 +16,10 @@ bindkey '^h' backward-delete-char
 bindkey '^w' backward-kill-word
 bindkey '^r' history-incremental-search-backward
 
-# Home and End keys
+# Home, End, and Delete keys
 bindkey '^[[H' beginning-of-line
 bindkey '^[[F' end-of-line
+bindkey '^[[3~' delete-char
 
 # Vi mode prompt indicator
 function zle-line-init zle-keymap-select {

@@ -98,9 +98,9 @@ install_packages_brew() {
   read_pkg_array "$DEPS_DIR/brew-cask.txt" casks
   log "Installing ${#formulae[@]} brew formulae"
   brew install "${formulae[@]}"
-  # Cursor CLI (not the cask/app)
-  if ! command -v cursor >/dev/null 2>&1; then
-    log "Installing Cursor CLI"
+  # Cursor Agent CLI
+  if ! command -v cursor-agent >/dev/null 2>&1; then
+    log "Installing Cursor Agent CLI"
     curl -fsSL https://cursor.com/install | bash
   fi
 
