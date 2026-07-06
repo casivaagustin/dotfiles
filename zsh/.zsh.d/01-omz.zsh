@@ -1,3 +1,7 @@
+# Default editor
+export EDITOR="nvim"
+export VISUAL="nvim"
+
 # Oh My Zsh configuration
 ZSH=$HOME/.oh-my-zsh
 ZSH_THEME="powerlevel10k/powerlevel10k"
