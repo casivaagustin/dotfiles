@@ -90,6 +90,13 @@ add_repo dbeaver \
   "deb [signed-by=/usr/share/keyrings/dbeaver-archive-keyring.gpg] https://dbeaver.io/debs/dbeaver-ce /"
 
 # ---------------------------------------------------------------------------
+# WezTerm — not in the distro repos; uses the maintainer's Fury apt repo.
+# ---------------------------------------------------------------------------
+add_repo wezterm \
+  https://apt.fury.io/wez/gpg.key \
+  "deb [signed-by=/usr/share/keyrings/wezterm-archive-keyring.gpg] https://apt.fury.io/wez/ * *"
+
+# ---------------------------------------------------------------------------
 # Docker CE (docker.com's apt repo, newer than the distro-shipped docker.io)
 # ---------------------------------------------------------------------------
 # Remove conflicting Docker repo configs from prior installs before adding ours.
@@ -107,7 +114,7 @@ if [ "$need_update" -eq 1 ]; then
 fi
 
 log "Installing third-party apt packages"
-apt_install brave-browser code 1password insync dbeaver-ce \
+apt_install brave-browser code 1password insync dbeaver-ce wezterm \
             docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
 # ---------------------------------------------------------------------------

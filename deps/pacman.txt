@@ -8,6 +8,7 @@ wget
 zsh
 stow
 tmux
+wezterm
 fzf
 bat
 fd
@@ -19,6 +20,10 @@ btop
 htop
 mc
 ncdu
+# Font rendering
+freetype2
+fontconfig
+noto-fonts
 noto-fonts-emoji
 ranger
 smplayer
@@ -28,11 +33,14 @@ dbeaver
 tailscale
 docker
 docker-compose
+lazydocker
+ctop
 syncthing
 base-devel
 
 # i3 desktop environment
-i3-gaps
+# i3-wm is mainline i3 (gaps merged upstream in 2022; i3-gaps was removed).
+i3-wm
 i3status
 i3lock
 picom
@@ -40,13 +48,13 @@ dunst
 dmenu
 rofi
 xdotool
-xautolock
-nitrogen
 xorg-xset
 maim
 xclip
 flameshot
-pulseaudio
+# NOTE: no `pulseaudio` — Manjaro defaults to PipeWire (pipewire-pulse), which
+# conflicts with the pulseaudio daemon. pavucontrol/pasystray use libpulse and
+# work fine against PipeWire.
 pavucontrol
 playerctl
 pasystray
@@ -57,7 +65,6 @@ clipit
 polkit-gnome
 gnome-terminal
 pcmanfm
-moc
 conky
 blueman
 i3-scrot

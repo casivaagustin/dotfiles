@@ -10,5 +10,6 @@ google-chrome
 insync
 tailscale
 visual-studio-code
+wezterm
 docker-desktop
 lando

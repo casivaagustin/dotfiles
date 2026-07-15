@@ -14,6 +14,8 @@ esbenp.prettier-vscode
 jim-ki-do.continue-commit-notes
 laravel.vscode-laravel
 llam4u.nerdtree
+lyuwenhan.mermaid-snap
+mermaidchart.vscode-mermaid-chart
 ms-azuretools.vscode-containers
 ms-azuretools.vscode-docker
 ms-python.debugpy
@@ -32,4 +34,5 @@ tchayen.markdown-links
 telesoho.vscode-markdown-paste-image
 usernamehw.errorlens
 vscodevim.vim
+yzane.markdown-pdf
 yzhang.markdown-all-in-one

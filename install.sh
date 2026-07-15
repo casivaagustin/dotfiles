@@ -96,8 +96,21 @@ install_packages_brew() {
   local formulae casks
   read_pkg_array "$DEPS_DIR/brew.txt"      formulae
   read_pkg_array "$DEPS_DIR/brew-cask.txt" casks
-  log "Installing ${#formulae[@]} brew formulae"
-  brew install "${formulae[@]}"
+  # Only install formulae that aren't already present.
+  local f_missing=() f
+  for f in "${formulae[@]}"; do
+    if brew list --formula "$f" >/dev/null 2>&1; then
+      log "formula already installed: $f"
+    else
+      f_missing+=("$f")
+    fi
+  done
+  if [ "${#f_missing[@]}" -gt 0 ]; then
+    log "Installing ${#f_missing[@]} brew formulae (of ${#formulae[@]} listed)"
+    brew install "${f_missing[@]}"
+  else
+    log "All ${#formulae[@]} brew formulae already installed"
+  fi
   # Cursor Agent CLI
   if ! command -v cursor-agent >/dev/null 2>&1; then
     log "Installing Cursor Agent CLI"
@@ -167,17 +180,43 @@ install_packages_pacman() {
   read_pkg_array "$DEPS_DIR/pacman.txt" pkgs
   log "Syncing pacman database"
   sudo pacman -Sy --noconfirm
-  log "Installing ${#pkgs[@]} pacman packages"
-  sudo pacman -S --needed --noconfirm "${pkgs[@]}"
+
+  # Skip any package already satisfied by an installed package OR a provider
+  # (e.g. Manjaro ships `dmenu-manjaro`, which provides `dmenu`). Installing the
+  # upstream name would trigger a replace/conflict prompt that --noconfirm
+  # auto-declines, aborting the whole transaction. `pacman -T` reports only the
+  # unsatisfied targets, honouring provides.
+  local missing=()
+  while IFS= read -r pkg; do
+    [ -n "$pkg" ] && missing+=("$pkg")
+  done < <(pacman -T "${pkgs[@]}" 2>/dev/null || true)
+
+  if [ "${#missing[@]}" -eq 0 ]; then
+    log "All ${#pkgs[@]} pacman packages already satisfied"
+  else
+    log "Installing ${#missing[@]} pacman packages (of ${#pkgs[@]} listed)"
+    sudo pacman -S --needed --noconfirm "${missing[@]}"
+  fi
 
   local aur_pkgs
   read_pkg_array "$DEPS_DIR/aur.txt" aur_pkgs
   if [ "${#aur_pkgs[@]}" -gt 0 ]; then
-    ensure_yay
-    log "Installing ${#aur_pkgs[@]} AUR packages via yay"
-    yay -S --needed --noconfirm --removemake \
-        --answerdiff=None --answerclean=None --answeredit=None \
-        "${aur_pkgs[@]}"
+    # Skip AUR packages already installed or provided, same as above. This also
+    # avoids bootstrapping yay when everything is already present.
+    local aur_missing=()
+    while IFS= read -r pkg; do
+      [ -n "$pkg" ] && aur_missing+=("$pkg")
+    done < <(pacman -T "${aur_pkgs[@]}" 2>/dev/null || true)
+
+    if [ "${#aur_missing[@]}" -eq 0 ]; then
+      log "All ${#aur_pkgs[@]} AUR packages already satisfied"
+    else
+      ensure_yay
+      log "Installing ${#aur_missing[@]} AUR packages via yay (of ${#aur_pkgs[@]} listed)"
+      yay -S --needed --noconfirm --removemake \
+          --answerdiff=None --answerclean=None --answeredit=None \
+          "${aur_missing[@]}"
+    fi
   fi
 }
 
@@ -303,19 +342,36 @@ stow_packages() {
   done
 }
 
+# Pick a Cursor CLI that installs extensions HEADLESSLY. Cursor's "Install
+# 'cursor' command in PATH" (and some manual installs) symlink
+# /usr/local/bin/cursor to a monolithic AppImage/GUI binary that just opens the
+# editor when given --install-extension. The package-managed launcher runs the
+# VS Code CLI headlessly, so prefer it over whatever `cursor` resolves to.
+resolve_cursor_cli() {
+  local c
+  for c in /usr/bin/cursor /usr/share/cursor/bin/cursor; do
+    [ -x "$c" ] && { echo "$c"; return; }
+  done
+  command -v cursor 2>/dev/null || true
+}
+
 install_editor_extensions() {
-  if command -v code >/dev/null 2>&1 && [ -f "$DOTFILES_DIR/vscode/extensions.txt" ]; then
+  local ext_list="$DOTFILES_DIR/vscode/extensions.txt"
+
+  if command -v code >/dev/null 2>&1 && [ -f "$ext_list" ]; then
     log "Installing VS Code extensions"
-    xargs -n1 code --install-extension < "$DOTFILES_DIR/vscode/extensions.txt" || true
+    xargs -n1 -I{} code --install-extension {} --force < "$ext_list" || true
   else
-    warn "code CLI or vscode/extensions.txt missing; skipping VS Code extensions"
+    warn "code CLI or $ext_list missing; skipping VS Code extensions"
   fi
 
-  if command -v cursor >/dev/null 2>&1 && [ -f "$DOTFILES_DIR/cursor/extensions.txt" ]; then
-    log "Installing Cursor extensions"
-    xargs -n1 cursor --install-extension < "$DOTFILES_DIR/cursor/extensions.txt" || true
+  local cursor_bin
+  cursor_bin="$(resolve_cursor_cli)"
+  if [ -n "$cursor_bin" ] && [ -f "$ext_list" ]; then
+    log "Installing Cursor extensions via $cursor_bin"
+    xargs -n1 -I{} "$cursor_bin" --install-extension {} --force < "$ext_list" || true
   else
-    warn "cursor CLI or cursor/extensions.txt missing; skipping Cursor extensions"
+    warn "cursor CLI or $ext_list missing; skipping Cursor extensions"
   fi
 }
 
