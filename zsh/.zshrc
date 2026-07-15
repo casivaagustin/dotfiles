@@ -199,6 +199,9 @@ alias hdmioffv="xrandr --output DP-1-2 --off"
 
 alias projects="cd ~/projects"
 
+export EDITOR=nvim
+export VISUAL=nvim
+
 # pnpm
 export PNPM_HOME="/home/agustin/.local/share/pnpm"
 case ":$PATH:" in
@@ -230,3 +233,5 @@ export PATH="/home/agustin/.lando/bin:$PATH"; #landopath
 
 # Added by LM Studio CLI tool (lms)
 export PATH="$PATH:/home/agustin/.lmstudio/bin"
+
+
