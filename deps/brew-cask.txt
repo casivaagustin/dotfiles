@@ -1,0 +1,14 @@
+# Homebrew casks (GUI apps) installed on macOS.
+# One package per line. Lines starting with # or blank lines are ignored.
+# smplayer is Linux-only and is intentionally not listed here.
+1password
+brave-browser
+calibre
+dbeaver-community
+discord
+google-chrome
+insync
+tailscale
+visual-studio-code
+docker-desktop
+lando

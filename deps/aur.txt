@@ -1,0 +1,12 @@
+# AUR packages installed via yay on Manjaro / Arch.
+# install.sh bootstraps yay from AUR git if it's missing.
+# One package per line. Lines starting with # or blank lines are ignored.
+1password
+google-chrome
+brave-bin
+insync
+cursor-bin
+visual-studio-code-bin
+lazydocker
+ctop-bin
+lando

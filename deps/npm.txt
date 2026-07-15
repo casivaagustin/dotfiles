@@ -1,0 +1,3 @@
+# Global npm CLIs. Installed with `npm install -g` after Node.js is present.
+# One package per line. Lines starting with # or blank lines are ignored.
+@openai/codex

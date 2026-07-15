@@ -1,0 +1,60 @@
+# Packages installed via apt on Ubuntu / Debian.
+# One package per line. Lines starting with # or blank lines are ignored.
+# Third-party apt repos (Chrome, Brave, VS Code, 1Password, Tailscale, Insync,
+# DBeaver, Discord, Cursor AppImage) are handled by deps/apt-third-party.sh.
+git
+curl
+wget
+gnupg
+ca-certificates
+apt-transport-https
+zsh
+stow
+tmux
+fzf
+bat
+fd-find
+eza
+git-delta
+tk
+libnotify-bin
+libnotify4
+btop
+htop
+mc
+ncdu
+ranger
+smplayer
+calibre
+syncthing
+
+# i3 desktop environment
+i3
+i3status
+i3lock
+picom
+dunst
+dmenu
+rofi
+xdotool
+xautolock
+nitrogen
+x11-xserver-utils
+maim
+xclip
+flameshot
+pulseaudio
+pavucontrol
+playerctl
+pasystray
+xbacklight
+xfce4-power-manager
+network-manager-gnome
+clipit
+policykit-1-gnome
+gnome-terminal
+pcmanfm
+moc
+conky-all
+blueman
+scrot

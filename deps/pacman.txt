@@ -1,0 +1,63 @@
+# Packages installed via pacman on Manjaro / Arch (official repos).
+# One package per line. Lines starting with # or blank lines are ignored.
+# AUR packages (1Password, Chrome, Brave, Insync, Cursor, VS Code) live in
+# deps/aur.txt and are installed via yay (bootstrapped by install.sh).
+git
+curl
+wget
+zsh
+stow
+tmux
+fzf
+bat
+fd
+eza
+git-delta
+tk
+libnotify
+btop
+htop
+mc
+ncdu
+noto-fonts-emoji
+ranger
+smplayer
+calibre
+discord
+dbeaver
+tailscale
+docker
+docker-compose
+syncthing
+base-devel
+
+# i3 desktop environment
+i3-gaps
+i3status
+i3lock
+picom
+dunst
+dmenu
+rofi
+xdotool
+xautolock
+nitrogen
+xorg-xset
+maim
+xclip
+flameshot
+pulseaudio
+pavucontrol
+playerctl
+pasystray
+xorg-xbacklight
+xfce4-power-manager
+network-manager-applet
+clipit
+polkit-gnome
+gnome-terminal
+pcmanfm
+moc
+conky
+blueman
+i3-scrot

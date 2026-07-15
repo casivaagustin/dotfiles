@@ -1,0 +1,20 @@
+# Homebrew formulae installed on macOS.
+# One package per line. Lines starting with # or blank lines are ignored.
+# GUI apps live in deps/brew-cask.txt.
+git
+zsh
+stow
+tmux
+fzf
+bat
+fd
+eza
+git-delta
+btop
+htop
+mc
+ncdu
+ranger
+syncthing
+lazydocker
+ctop
