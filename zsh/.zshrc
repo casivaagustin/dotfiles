@@ -3,7 +3,9 @@
 #   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 # fi
 
-ZSHD="${0:A:h}/.zsh.d"
+# Use %x (this file), not $0 — on startup $0 is "zsh" and :A resolves via $PWD,
+# so terminals opened outside $HOME silently skip .zsh.d (no prompt/history).
+ZSHD="${${(%):-%x}:A:h}/.zsh.d"
 
 # Source all config files in order
 for config_file in "$ZSHD"/*.zsh(N); do
@@ -107,6 +109,7 @@ alias projects="cd ~/projects"
 
 export EDITOR=nvim
 export VISUAL=nvim
+export BROWSER=brave-browser
 
 # pnpm
 export PNPM_HOME="/home/agustin/.local/share/pnpm"
