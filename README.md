@@ -1,121 +1,94 @@
 # Dotfiles
 
-These are my dot files, this repo is desinged to be used be my and just me. This readme is for me to don't forget 
+These are my dot files, this repo is desinged to be used be my and just me. This readme is for me to don't forget
 how it works and how to use it.
 
-To start, Clone this repo into ~/dotfiles
+## One-line remote install
 
-Normally, just enter to the dotfiles directory and run
-
-`stow DIRECTORY`
-
-Where DIRECTORY is some of the directories that holds the configs to each tool.
-
-Some of them it might require some additional installation.
-
-# Install Before
-
-- fzf
-- fd
-- bat
-- delta 
-- eza
-- stow
-- wish
-- tk
-- libnotify-bin
-- libnotify4
-- btop
-- htop
-- mc
-- ncdu
-- tmux
-
-## Ubuntu Install
-
-  `sudo apt install zsh fzf bat delta eza fd-find stow wish libnotify-bin libnotify4 btop htop nc ncdu tmux`
-
-## OSX
+Runs everything on Manjaro/Arch, Ubuntu/Debian, and macOS from a fresh machine.
+Safe to re-run.
 
 ```
-    cd ~
-	brew install htop bat fzf fd delta eza stow tmux btop htop mc
-	git clone https://github.com/zsh-users/zsh-autosuggestions 
-	git clone https://github.com/zsh-users/zsh-syntax-highlighting
-   	git clone --depth=1 https://github.com/romkatv/powerlevel10k.git 
-   	brew tap homebrew/cask-fonts\nbrew install font-meslo-lg-nerd-font
-``` 
-
-## O-my-ZSH and power10k
-
-```
-cd ~
-git clone https://github.com/romkatv/powerlevel10k.git $ZSH_CUSTOM/themes/powerlevel10k
-sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/casivaagustin/dotfiles/main/bootstrap.sh)"
 ```
 
-# zsh
+Override defaults with env vars if needed:
 
-Install
+```
+DOTFILES_DIR=~/code/dotfiles \
+DOTFILES_REPO=https://github.com/casivaagustin/dotfiles.git \
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/casivaagustin/dotfiles/main/bootstrap.sh)"
+```
+
+## Local install
+
+If the repo is already cloned:
 
 ```
 cd ~/dotfiles
-stow zsh
+./install.sh
 ```
 
-# p10k
+## What gets installed
 
-Install 
+`bootstrap.sh` detects the OS, installs `git` if missing, clones this repo to
+`~/dotfiles`, then hands off to `install.sh`. `install.sh` performs the steps
+below, skipping anything already present.
 
-```
-cd ~/dotfiles
-stow p10k
-```
+**OS packages** — installed from the appropriate list under `deps/`:
 
-# tmux
+- `deps/apt.txt`             — Ubuntu / Debian, official repos (`sudo apt-get install`)
+- `deps/apt-third-party.sh`  — Ubuntu / Debian, third-party repos: Google Chrome, Brave, VS Code, 1Password, Insync, DBeaver, plus Tailscale (official installer), Discord (.deb), Cursor (AppImage in `~/Applications`)
+- `deps/pacman.txt`          — Manjaro / Arch, official repos (`sudo pacman -S --needed`)
+- `deps/aur.txt`             — Manjaro / Arch, AUR packages installed via `yay` (1Password, Google Chrome, Brave, Insync, Cursor, VS Code). `yay` is bootstrapped from AUR git on first run.
+- `deps/brew.txt`             — macOS Homebrew formulae (`brew install`; Homebrew is installed first if missing)
+- `deps/brew-cask.txt`       — macOS Homebrew casks / GUI apps (`brew install --cask`): 1Password, Brave, Calibre, Cursor, DBeaver, Discord, Chrome, Insync, Tailscale, VS Code
 
-# vim
+Edit those files to add or drop dependencies.
 
-Install Ultimate VIM first
+**Node.js via nvm** — the installer clones [nvm](https://github.com/nvm-sh/nvm)
+into `~/.nvm`, installs the latest Node.js with `nvm install node --default`,
+and sets it as the default version. `zsh/.zsh.d/04-tools.zsh` already sources
+nvm on shell startup, so no manual PATH setup is needed. Node.js and npm are
+intentionally NOT in the OS package lists — nvm is the single source of truth.
 
-```
-cd ~
-git clone --depth=1 https://github.com/amix/vimrc.git ~/.vim_runtime
-cd ~/dotfiles
-stow vim
-```
+**Global npm CLIs** — installed via `npm install -g` after nvm is set up:
 
-# nvim
+- `deps/npm.txt` — Claude Code (`@anthropic-ai/claude-code`), Codex (`@openai/codex`), OpenCode (`opencode-ai`). Google Antigravity CLI is listed but commented pending package-name verification.
 
-```
-cd ~
-git clone https://github.com/LazyVim/starter ~/.config/nvim
-rm -rf ~/.config/nvim/.git
-cd ~/dotfiles
-stow nvim
-```
+**Zsh ecosystem** — cloned into the standard oh-my-zsh locations:
 
-# Fonts
+- oh-my-zsh at `~/.oh-my-zsh`
+- powerlevel10k theme at `$ZSH_CUSTOM/themes/powerlevel10k`
+- zsh-autosuggestions plugin at `$ZSH_CUSTOM/plugins/zsh-autosuggestions`
+- zsh-syntax-highlighting plugin at `$ZSH_CUSTOM/plugins/zsh-syntax-highlighting`
 
-Install with 
+**Editor starters**:
 
-  `stow fonts`
+- Ultimate VIM (amix/vimrc) at `~/.vim_runtime`
+- LazyVim starter at `~/.config/nvim`
 
-On Linux Run
+**Stow packages** — every top-level config directory is symlinked into place with
+`stow`. Linux-only packages (`i3`, `picom`, `polybar`) are skipped on macOS.
 
-  `fc-cache -fv`
-  
-On OSX, install the fonts and set the font in your terminal profile (iterm2 > settings> profile)
+- `zsh`, `p10k`, `tmux`, `vim`, `nvim`
+- `fonts`, `agents-rules`
+- `cursor`, `vscode`
+- `i3`, `picom`, `polybar` (Linux only)
 
-```
-   brew tap homebrew/cask-fonts\nbrew install font-meslo-lg-nerd-font
-```
+**Fonts**:
 
-# Links and more info
+- Linux: `fc-cache -fv` is run after `stow fonts`
+- macOS: `font-meslo-lg-nerd-font` is installed via Homebrew cask
+
+**Editor extensions** — installed if the CLI is available:
+
+- VS Code extensions from `vscode/extensions.txt` (via `code --install-extension`)
+- Cursor extensions from `cursor/extensions.txt` (via `cursor --install-extension`)
+
+## Links and more info
 
 - https://www.youtube.com/watch?v=y6XCebnB9gs
 - https://www.youtube.com/watch?v=NoFiYOqnC4o&t=10s
 - https://www.youtube.com/watch?v=mmqDYw9C30I
 - https://www.josean.com/posts/7-amazing-cli-tools
-
-

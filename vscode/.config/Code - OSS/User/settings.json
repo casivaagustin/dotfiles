@@ -9,5 +9,6 @@
     "intelephense.format.enable": false,
     "[php]": {
         "editor.defaultFormatter": "open-southeners.laravel-pint"
-    }
+    },
+    "workbench.startupEditor": "none"
 }

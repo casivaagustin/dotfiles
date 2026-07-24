@@ -3,5 +3,7 @@
     "workbench.preferredLightColorTheme": "WebStorm Darcula",
     "editor.fontSize": 16,
     "window.zoomLevel": 0.6,
-    "workbench.iconTheme": "vscode-jetbrains-icon-theme"
+    "workbench.iconTheme": "vscode-jetbrains-icon-theme",
+    "laravel-pint.enable": true,
+    "editor.formatOnSave": true
 }
