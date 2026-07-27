@@ -8,6 +8,8 @@ insync
 cursor-bin
 visual-studio-code-bin
 lando
+# calibre-bin tracks the latest upstream release (repo `calibre` lags behind).
+calibre-bin
 # Moved from official repos (dropped/relocated on current Arch/Manjaro):
 xautolock
 nitrogen

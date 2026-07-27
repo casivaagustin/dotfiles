@@ -27,7 +27,6 @@ noto-fonts
 noto-fonts-emoji
 ranger
 smplayer
-calibre
 discord
 dbeaver
 tailscale
