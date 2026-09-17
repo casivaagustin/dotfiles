@@ -220,6 +220,56 @@ install_packages_pacman() {
   fi
 }
 
+# Teleport client (tsh/tctl). Bump these to move to a new release.
+TELEPORT_VERSION="18.10.0"
+TELEPORT_EDITION="enterprise"
+
+# Teleport ships no Arch package, so on Manjaro/Arch its installer takes the
+# tarball path, which verifies the download with `$SUDO $SHA_COMMAND -c ...`.
+# It picks $SHA_COMMAND with a plain `type shasum` first. That combination is
+# broken here: shasum comes from perl at /usr/bin/core_perl/shasum, which
+# /etc/profile.d/perlbin.sh puts on the interactive PATH but which is NOT on
+# sudo's secure_path. So the probe finds shasum, the sudo call then dies with
+# "command not found", and the installer aborts under `set -e`.
+#
+# Piping into `sudo bash` instead of plain `bash` fixes it: the probe and the
+# checksum call then run under one PATH (secure_path), so they agree — shasum
+# if root can see it, otherwise sha256sum from coreutils. The installer needs
+# root to write /usr/local/bin either way, so nothing is escalated that the
+# script wasn't already going to do for itself.
+install_teleport() {
+  if [ "$OS" = "osx" ]; then
+    warn "Teleport client install is Linux-only; skipping on macOS"
+    return
+  fi
+
+  if command -v tsh >/dev/null 2>&1; then
+    local current
+    # `|| true` matters: under `set -o pipefail` a broken tsh would make this
+    # assignment non-zero and abort the whole installer instead of reinstalling.
+    current="$(tsh version 2>/dev/null | head -1 | awk '{print $2}' | tr -d 'v')" || true
+    if [ "$current" = "$TELEPORT_VERSION" ]; then
+      log "Teleport $TELEPORT_VERSION already installed"
+      return
+    fi
+    log "Teleport ${current:-unknown} installed; upgrading to $TELEPORT_VERSION"
+  fi
+
+  # Both checksum tools should already be there (perl / coreutils), but a
+  # missing one fails the install late and cryptically, so make it explicit.
+  if ! sudo sh -c 'type shasum >/dev/null 2>&1 || type sha256sum >/dev/null 2>&1'; then
+    log "Installing perl (provides shasum) for the Teleport installer"
+    case "$OS" in
+      debian) sudo apt-get install -y perl ;;
+      arch)   sudo pacman -S --needed --noconfirm perl ;;
+    esac
+  fi
+
+  log "Installing Teleport $TELEPORT_VERSION ($TELEPORT_EDITION)"
+  curl -fsSL https://cdn.teleport.dev/install.sh \
+    | sudo bash -s "$TELEPORT_VERSION" "$TELEPORT_EDITION"
+}
+
 install_nvm() {
   export NVM_DIR="$HOME/.nvm"
   if [ ! -s "$NVM_DIR/nvm.sh" ]; then
@@ -322,6 +372,7 @@ STOW_PACKAGES=(
   i3
   picom
   polybar
+  autorandr
 )
 
 stow_packages() {
@@ -334,7 +385,7 @@ stow_packages() {
     # Linux-only packages: don't stow on OSX.
     if [ "$OS" = "osx" ]; then
       case "$pkg" in
-        i3|picom|polybar) warn "skipping $pkg on macOS"; continue ;;
+        i3|picom|polybar|autorandr) warn "skipping $pkg on macOS"; continue ;;
       esac
     fi
     log "stow $pkg"
@@ -390,35 +441,38 @@ main() {
     arch)   install_packages_pacman ;;
   esac
 
-  step 2 "Installing Oh My Zsh"
+  step 2 "Installing Teleport client"
+  install_teleport
+
+  step 3 "Installing Oh My Zsh"
   install_oh_my_zsh
 
-  step 3 "Installing Zsh ecosystem (powerlevel10k, plugins)"
+  step 4 "Installing Zsh ecosystem (powerlevel10k, plugins)"
   install_zsh_ecosystem
 
-  step 4 "Installing Vim runtime"
+  step 5 "Installing Vim runtime"
   install_vim_runtime
 
-  step 5 "Installing Neovim (LazyVim starter)"
+  step 6 "Installing Neovim (LazyVim starter)"
   install_nvim_starter
 
-  step 6 "Installing nvm and Node.js"
+  step 7 "Installing nvm and Node.js"
   install_nvm
 
-  step 7 "Installing npm global packages"
+  step 8 "Installing npm global packages"
   install_npm_globals
 
-  step 8 "Symlinking dotfiles with stow"
+  step 9 "Symlinking dotfiles with stow"
   stow_packages
 
-  step 9 "Setting up fonts"
+  step 10 "Setting up fonts"
   if [ "$OS" = "osx" ]; then
     install_fonts_osx
   else
     refresh_font_cache_linux
   fi
 
-  step 10 "Installing editor extensions (VS Code, Cursor)"
+  step 11 "Installing editor extensions (VS Code, Cursor)"
   install_editor_extensions
 
   printf '\n\033[1;32m'

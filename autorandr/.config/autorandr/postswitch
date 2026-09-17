@@ -1,0 +1,4 @@
+#!/bin/sh
+# Reapply the wallpaper at the new screen geometry whenever autorandr
+# switches monitor layout (e.g. plugging/unplugging an external display).
+nitrogen --restore

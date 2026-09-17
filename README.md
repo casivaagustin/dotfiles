@@ -46,6 +46,16 @@ below, skipping anything already present.
 
 Edit those files to add or drop dependencies.
 
+**Teleport client** (Linux only) — installed from the official CDN installer at
+the version pinned by `TELEPORT_VERSION` / `TELEPORT_EDITION` at the top of
+`install_teleport` in `install.sh`. Skipped if `tsh` already reports that
+version. The installer is piped into `sudo bash` rather than `bash`: on
+Manjaro/Arch there is no Teleport package, so its script falls back to the
+tarball path and verifies the checksum with `$SUDO shasum`, but `shasum` lives
+in `/usr/bin/core_perl` — on the interactive PATH, not on sudo's `secure_path`.
+Running the whole thing as root keeps the tool probe and the tool call on the
+same PATH, so it resolves `shasum`, or falls back to `sha256sum`, consistently.
+
 **Node.js via nvm** — the installer clones [nvm](https://github.com/nvm-sh/nvm)
 into `~/.nvm`, installs the latest Node.js with `nvm install node --default`,
 and sets it as the default version. `zsh/.zsh.d/04-tools.zsh` already sources

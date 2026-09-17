@@ -143,3 +143,10 @@ export PATH="/home/agustin/.lando/bin:$PATH"; #landopath
 # Added by LM Studio CLI tool (lms)
 export PATH="$PATH:/home/agustin/.lmstudio/bin"
 
+
+# bun completions
+[ -s "/home/agustin/.bun/_bun" ] && source "/home/agustin/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"

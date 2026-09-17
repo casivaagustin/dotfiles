@@ -1,0 +1,5 @@
+#!/bin/sh
+# Manually re-detect monitor layout. nvidia PRIME doesn't emit the udev
+# hotplug event autorandr needs, so this has to be triggered by hand
+# after plugging/unplugging an external display.
+notify-send "Monitor: $(autorandr --change 2>&1)"

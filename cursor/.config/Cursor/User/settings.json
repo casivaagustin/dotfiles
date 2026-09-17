@@ -1,9 +1,15 @@
 {
-    "window.autoDetectColorScheme": true,
-    "workbench.preferredLightColorTheme": "WebStorm Darcula",
-    "editor.fontSize": 16,
-    "window.zoomLevel": 0.6,
-    "workbench.iconTheme": "vscode-jetbrains-icon-theme",
-    "laravel-pint.enable": true,
-    "editor.formatOnSave": true
+  "window.autoDetectColorScheme": true,
+  "workbench.preferredLightColorTheme": "WebStorm Dark",
+  "editor.fontSize": 20,
+  "window.zoomLevel": 0.6,
+  "workbench.iconTheme": "vscode-jetbrains-icon-theme",
+  "laravel-pint.enable": true,
+  "editor.formatOnSave": true,
+  "files.autoSave": "afterDelay",
+  "workbench.settings.applyToAllProfiles": [
+    "editor.fontFamily"
+  ],
+  "editor.fontFamily": "Jetbrains Mono",
+  "cursor.composer.queueMessageDefaultBehavior": "steer",
 }

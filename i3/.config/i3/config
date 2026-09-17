@@ -100,6 +100,10 @@ bindsym $mod+F5 exec terminal -e 'mocp'
 bindsym $mod+Ctrl+t exec --no-startup-id picom -b
 bindsym $mod+Shift+d --release exec "killall dunst; exec notify-send 'restart dunst'"
 
+# Manually re-detect monitor layout (nvidia PRIME doesn't emit the udev
+# hotplug event autorandr needs, so this has to be triggered by hand)
+bindsym $mod+Shift+m exec --no-startup-id ~/.config/i3/i3-monitor-switch
+
 # focus_follows_mouse no
 
 # change focus
@@ -339,8 +343,10 @@ set_from_resource $term_color15    color15
 # finds out, if available)
 bar {
     status_command i3status
+    #status_command i3status-rs ~/.config/i3status-rust/config.toml
     #wheel_up_cmd nop
     #wheel_down_cmd nop
+
     colors {
         background #1e1e2e
         statusline #cdd6f4
@@ -430,6 +436,8 @@ exec --no-startup-id blueman-applet
 exec --no-startup-id flameshot
 exec --no-startup-id discord
 exec --no-startup-id google-chrome
+exec --no-startup-id 1password
+exec --no-startup-id media-control-indicator 
 exec --no-startup-id 1password
 exec --no-startup-id insync start
 exec --no-startup-id pasystray start 
